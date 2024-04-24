@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-24T10:37:27+06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aleksandr Maskalev</title><subtitle>Write about what I&apos;ve learned and what inspires me
+</subtitle><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><entry><title type="html">Navigating Your Jekyll Website with Tags</title><link href="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html" rel="alternate" type="text/html" title="Navigating Your Jekyll Website with Tags" /><published>2024-04-23T23:04:02+06:00</published><updated>2024-04-23T23:04:02+06:00</updated><id>http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags</id><content type="html" xml:base="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html"><![CDATA[<p>So, I decided to enhance the navigation on my website and add tags functionality to my posts.</p>
+
+<p>Here’s what I wanted to accomplish:</p>
+
+<ol>
+  <li>Add tags to all of my posts.</li>
+  <li>Create a page listing all tags.</li>
+  <li>Create individual pages for each tag listing all relevant posts.</li>
+</ol>
+
+<p>The first step was to define the “tag” variable in the Front Matter section for each post. For example, here’s how I did it for this post:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">post</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Navigating</span><span class="nv"> </span><span class="s">Your</span><span class="nv"> </span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">Website</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">Tags"</span>
+<span class="na">tags</span><span class="pi">:</span> <span class="s">jekyll</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<p>Next, I added a block to handle tags processing in the <code class="language-plaintext highlighter-rouge">post.html</code> layout:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"post-meta"</span><span class="nt">&gt;</span>
+  {% if page.tags %}
+    {% assign tags = page.tags | remove: "[" | remove: "]" | replace: '"', '' | split: ", " %}
+    {% for tag in tags %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/tags/{{ tag }}"</span><span class="nt">&gt;</span>#{{ tag }}<span class="nt">&lt;/a&gt;</span>
+    {% endfor %}
+  {% endif %}
+<span class="nt">&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p>In the next step, I needed to create a page listing all tags. I created the <code class="language-plaintext highlighter-rouge">tags.html</code> layout:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: base
+---
+
+{% assign tags = site.tags %}
+
+<span class="nt">&lt;div&gt;</span>
+  <span class="nt">&lt;h1</span> <span class="na">class=</span><span class="s">"page-heading"</span><span class="nt">&gt;</span>{{ page.title }}<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;ul</span> <span class="na">style=</span><span class="s">'padding-top: 16px;'</span><span class="nt">&gt;</span>
+  {% for tag in tags %}
+    <span class="nt">&lt;li&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/tags/{{ tag[0] }}"</span><span class="nt">&gt;</span>{{ tag[0] }} ({{ tag[1] | size }})<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/li&gt;</span>
+  {% endfor %}
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>And added the corresponding .md file:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">tags</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s">Tags</span>
+<span class="na">permalink</span><span class="pi">:</span> <span class="s">/tags/</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<p>Finally, I created individual pages for each tag listing all relevant posts. For this, I created the <code class="language-plaintext highlighter-rouge">tag.html</code> layout:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: base
+---
+
+<span class="nt">&lt;div&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Articles tagged with "{{ page.tags }}"<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;ul</span> <span class="na">style=</span><span class="s">'padding-top: 16px;'</span><span class="nt">&gt;</span>
+    {% for post in site.posts %}
+      {% if post.tags contains page.tags %}
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{{ post.url }}"</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;</span>, published {{ post.date | date: "%Y-%m-%d" }}<span class="nt">&lt;/li&gt;</span>
+      {% endif %}
+    {% endfor %}
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>Then, I created a <code class="language-plaintext highlighter-rouge">tags</code> directory in the project root and for each tag, I created a .md file. For example:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">tag</span>
+<span class="na">tags</span><span class="pi">:</span> <span class="s">jekyll</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<p>Note: There are different approaches to naming the directory for tags. Some recommend <code class="language-plaintext highlighter-rouge">_tags</code>, but this didn’t work for me. Perhaps you have your own thoughts on this, and I’d be glad to hear them in the comments!</p>
+
+<p>Useful links on the topic:</p>
+
+<ul>
+  <li><a href="https://jekyllrb.com/docs/front-matter/">Description of Font Matter</a> from Jekyll’s docs</li>
+  <li><a href="https://jekyllrb.com/docs/variables/#site-variables">Description of site variables</a> from Jekyll’s docs</li>
+  <li><a href="https://jekyllrb.com/docs/variables/#page-variables">Description of page variables</a> from Jekyll’s docs</li>
+  <li><a href="https://www.untangled.dev/2020/06/02/tag-management-jekyll/">How do I tag posts in Jekyll? Jekyll tagging made simple</a> from blog of Joseph Victor Zammit</li>
+  <li><a href="https://blog.lunarlogic.com/2019/managing-tags-in-jekyll-blog-easily/">Managing tags in Jekyll blog easily</a> from blog of Lunar Logic</li>
+  <li><a href="https://github.com/maskalev/maskalev.github.io">Source code of this site:)</a></li>
+</ul>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="blog" /><category term="jekyll" /><summary type="html"><![CDATA[So, I decided to enhance the navigation on my website and add tags functionality to my posts.]]></summary></entry><entry><title type="html">Creating Multiple Blogs in a Single Jekyll Website</title><link href="http://localhost:4000/blog/2024/04/06/creating-multiple-blogs-in-a-single-jekyll-website.html" rel="alternate" type="text/html" title="Creating Multiple Blogs in a Single Jekyll Website" /><published>2024-04-06T10:01:40+06:00</published><updated>2024-04-06T10:01:40+06:00</updated><id>http://localhost:4000/blog/2024/04/06/creating-multiple-blogs-in-a-single-jekyll-website</id><content type="html" xml:base="http://localhost:4000/blog/2024/04/06/creating-multiple-blogs-in-a-single-jekyll-website.html"><![CDATA[<p>At the outset, I’ll mention that I’m using the “minima” theme, but I don’t think it significantly affects the process.</p>
+
+<p>So, at some point, I decided that I needed to create multiple independent blogs on my website. For example, the main blog (the one you’re reading right now) and a TIL (Today I Learned) blog for short notes on interesting things.</p>
+
+<p>First, I familiarized myself with the “category” variable.</p>
+
+<p>The Jekyll documentation provides the following description:</p>
+
+<blockquote>
+  <p>Instead of placing posts inside of folders, you can specify one or more categories that the post belongs to. When the site is generated the post will act as though it had been set with these categories normally. Categories (plural key) can be specified as a YAML list or a space-separated string.</p>
+</blockquote>
+
+<p>It seems like just what I need!</p>
+
+<p>Obviously, I want to add links to both blogs in the page header so that I can navigate to the desired blog at any time.</p>
+
+<p>To do this, I created two documents in the root directory to describe these links:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># blog.md
+---
+</span>layout: blog
+title: Blog
+permalink: /blog/
+<span class="p">
+---
+</span>
+<span class="gh"># til.md
+---
+</span>layout: til
+title: TIL
+permalink: /til/
+<span class="p">
+---
+</span></code></pre></div></div>
+
+<p>Also, in <code class="language-plaintext highlighter-rouge">_config.yml</code>, I added a section called <code class="language-plaintext highlighter-rouge">header_pages</code>. It’s not mandatory, but it allows you to control the order of links in the header (without this section, the links are arranged in alphabetical order).</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">header_pages</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">blog.md</span>
+  <span class="pi">-</span> <span class="s">til.md</span>
+</code></pre></div></div>
+
+<p>The last thing left to do was to describe the corresponding templates in the <code class="language-plaintext highlighter-rouge">_layouts</code> directory.</p>
+
+<p>They are very similar to the default <code class="language-plaintext highlighter-rouge">home.html</code> page, with just one difference – the line:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% assign posts = site.posts %}
+</code></pre></div></div>
+
+<p>I replaced it with:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh"># blog.html</span>
+{% assign posts = site.categories.blog %}<span class="sb">
+
+
+</span><span class="gh"># til.html</span>
+{% assign posts = site.categories.til %}
+</code></pre></div></div>
+
+<p>Now, all you need to do is specify the <code class="language-plaintext highlighter-rouge">categories</code> variable in the <code class="language-plaintext highlighter-rouge">.md</code> file with the post text. For example, for this post:</p>
+
+<div class="language-md highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">layout</span><span class="pi">:</span> <span class="s">post</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Creating</span><span class="nv"> </span><span class="s">Multiple</span><span class="nv"> </span><span class="s">Blogs</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">Single</span><span class="nv"> </span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">Website"</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2024-04-06</span><span class="nv"> </span><span class="s">10:01:40</span><span class="nv"> </span><span class="s">+0600"</span>
+<span class="na">categories</span><span class="pi">:</span> <span class="s">blog</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<p>I would like to note separately that adding multiple categories also works perfectly!</p>
+
+<p>Useful links on the topic:</p>
+
+<ul>
+  <li><a href="https://jekyllrb.com/docs/front-matter/#predefined-variables-for-posts">Description of predefined variables for posts</a> from Jekyll’s docs</li>
+  <li><a href="https://jekyllrb.com/docs/variables/#site-variables">Description of site variables</a> from Jekyll’s docs</li>
+  <li><a href="https://jekyllrb.com/docs/variables/#page-variables">Description of page variables</a> from Jekyll’s docs</li>
+  <li><a href="https://stackoverflow.com/questions/14560687/multiple-blogs-in-single-jekyll-website/">Discussion on Stackoverflow</a></li>
+  <li><a href="https://github.com/jekyll/minima">Source code of Minima theme</a></li>
+  <li><a href="https://github.com/maskalev/maskalev.github.io">Source code of this site:)</a></li>
+</ul>
+
+<p>Discussions are welcome!</p>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="blog" /><category term="jekyll" /><summary type="html"><![CDATA[At the outset, I’ll mention that I’m using the “minima” theme, but I don’t think it significantly affects the process.]]></summary></entry><entry><title type="html">Displaying Excess Items in Cart: How?</title><link href="http://localhost:4000/blog/2024/03/18/displaying-excess-items-in-cart-how.html" rel="alternate" type="text/html" title="Displaying Excess Items in Cart: How?" /><published>2024-03-18T20:02:36+06:00</published><updated>2024-03-18T20:02:36+06:00</updated><id>http://localhost:4000/blog/2024/03/18/displaying-excess-items-in-cart:-how</id><content type="html" xml:base="http://localhost:4000/blog/2024/03/18/displaying-excess-items-in-cart-how.html"><![CDATA[<p>This post is based on the 8th chapter of an amazing book “Django 4 by example” written by <a href="https://www.linkedin.com/in/amele/">Antonio Melé</a>.</p>
+
+<p>I am faced with such a problem: how can I display the quantity of an item in the shopping cart that is more than available for selection?</p>
+
+<p>Let’s say a user can add from 1 to 20 products from the product card. Also in the shopping cart, it can replace the current quantity with a new value from 1 to 20.</p>
+
+<p>Imagine that a user has added 20 units of a certain product to the cart (<em>fig. A</em>).</p>
+
+<p><img src="/assets/blog/2024/03/18/image-1.png" alt="fig. A" /></p>
+
+<p>What happens if a user wants to add another 20 units of the same product from its card?
+It can be seen that the total amount is indicated correctly, but the quantity is not (<em>fig. B</em>)!</p>
+
+<p><img src="/assets/blog/2024/03/18/image-2.png" alt="fig. B" /></p>
+
+<p>This can confuse the user.</p>
+
+<p>To fix this, when initializing the form, you need to compare the current value with the maximum allowed value. If it is larger, then add it to the list of available values.</p>
+
+<p>It was:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># forms.py
+</span>
+<span class="n">PRODUCT_QUANTITY_CHOICES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)]</span>
+
+
+<span class="k">class</span> <span class="nc">CartAddProductForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">TypedChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">PRODUCT_QUANTITY_CHOICES</span><span class="p">,</span> <span class="nb">coerce</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">override</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">BooleanField</span><span class="p">(</span>
+        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">HiddenInput</span>
+    <span class="p">)</span>
+
+
+<span class="c1"># views.py
+</span>
+<span class="k">def</span> <span class="nf">cart_detail</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">Cart</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cart</span><span class="p">:</span>
+        <span class="n">item</span><span class="p">[</span><span class="s">"update_quantity_form"</span><span class="p">]</span> <span class="o">=</span> <span class="n">CartAddProductForm</span><span class="p">(</span>
+            <span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s">"quantity"</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">],</span> <span class="s">"override"</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">"cart/detail.html"</span><span class="p">,</span> <span class="p">{</span><span class="s">"cart"</span><span class="p">:</span> <span class="n">cart</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>It became:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># forms.py
+</span>
+<span class="n">PRODUCT_QUANTITY_CHOICES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)]</span>
+
+
+<span class="k">class</span> <span class="nc">CartAddProductForm</span><span class="p">(</span><span class="n">forms</span><span class="p">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">quantity</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">TypedChoiceField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="p">[],</span> <span class="nb">coerce</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">override</span> <span class="o">=</span> <span class="n">forms</span><span class="p">.</span><span class="n">BooleanField</span><span class="p">(</span>
+        <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="p">.</span><span class="n">HiddenInput</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">max_quantity</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="s">"max_quantity"</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CartAddProductForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">fields</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">].</span><span class="n">choices</span> <span class="o">=</span> <span class="n">PRODUCT_QUANTITY_CHOICES</span>
+        <span class="k">if</span> <span class="n">max_quantity</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">fields</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">].</span><span class="n">choices</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">max_quantity</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">max_quantity</span><span class="p">)))</span>
+
+
+<span class="c1"># views.py
+</span>
+<span class="k">def</span> <span class="nf">cart_detail</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">cart</span> <span class="o">=</span> <span class="n">Cart</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cart</span><span class="p">:</span>
+        <span class="n">max_quantity</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">max_quantity</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">]</span>
+        <span class="n">item</span><span class="p">[</span><span class="s">"update_quantity_form"</span><span class="p">]</span> <span class="o">=</span> <span class="n">CartAddProductForm</span><span class="p">(</span>
+            <span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s">"quantity"</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s">"quantity"</span><span class="p">],</span> <span class="s">"override"</span><span class="p">:</span> <span class="bp">True</span><span class="p">},</span>
+            <span class="n">max_quantity</span><span class="o">=</span><span class="n">max_quantity</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">"cart/detail.html"</span><span class="p">,</span> <span class="p">{</span><span class="s">"cart"</span><span class="p">:</span> <span class="n">cart</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>Now the user sees the correct value in the shopping cart (<em>fig. C</em>)!</p>
+
+<p><img src="/assets/blog/2024/03/18/image-3.png" alt="fig. C" /></p>
+
+<p>Note that it can replace the quantity with the same values as before.</p>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="blog" /><category term="django" /><summary type="html"><![CDATA[This post is based on the 8th chapter of an amazing book “Django 4 by example” written by Antonio Melé.]]></summary></entry><entry><title type="html">How to parse XML with non-unique tags?</title><link href="http://localhost:4000/blog/2024/02/05/how-to-parse-xml-with-non-unique-tags.html" rel="alternate" type="text/html" title="How to parse XML with non-unique tags?" /><published>2024-02-05T15:30:24+06:00</published><updated>2024-02-05T15:30:24+06:00</updated><id>http://localhost:4000/blog/2024/02/05/how-to-parse-xml-with-non-unique-tags</id><content type="html" xml:base="http://localhost:4000/blog/2024/02/05/how-to-parse-xml-with-non-unique-tags.html"><![CDATA[<p>It is not difficult to parse an XML document in which all tags are unique (or the path to them is unique). And it’s good if that’s how your schemes are described! But they are not always described the way you want them to be. Clients often come to you with their own schemes that cannot be changed. And you will have to process, for example, such a document:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?𝚡𝚖𝚕 𝚟𝚎𝚛𝚜𝚒𝚘𝚗="𝟷.𝟶" 𝚎𝚗𝚌𝚘𝚍𝚒𝚗𝚐="𝚄𝚃𝙵-𝟾"?&gt;</span>
+<span class="nt">&lt;𝚋𝚘𝚍𝚢&gt;</span>
+   <span class="nt">&lt;𝚙𝚊𝚛𝚝𝚗𝚎𝚛𝚜&gt;</span>
+       <span class="nt">&lt;𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+           <span class="nt">&lt;𝚛𝚘𝚕𝚎&gt;</span>𝚜𝚞𝚙𝚙𝚕𝚒𝚎𝚛<span class="nt">&lt;/𝚛𝚘𝚕𝚎&gt;</span>
+           <span class="nt">&lt;𝚗𝚊𝚖𝚎&gt;</span>𝚏𝚊𝚌𝚝𝚘𝚛𝚢<span class="nt">&lt;/𝚗𝚊𝚖𝚎&gt;</span>
+           <span class="nt">&lt;𝚌𝚘𝚍𝚎&gt;</span>𝟷𝟸𝟹𝟺𝟻𝟼<span class="nt">&lt;/𝚌𝚘𝚍𝚎&gt;</span>
+       <span class="nt">&lt;/𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+       <span class="nt">&lt;𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+           <span class="nt">&lt;𝚛𝚘𝚕𝚎&gt;</span>𝚛𝚎𝚜𝚎𝚕𝚕𝚎𝚛<span class="nt">&lt;/𝚛𝚘𝚕𝚎&gt;</span>
+           <span class="nt">&lt;𝚗𝚊𝚖𝚎&gt;</span>𝚜𝚝𝚘𝚛𝚎<span class="nt">&lt;/𝚗𝚊𝚖𝚎&gt;</span>
+           <span class="nt">&lt;𝚌𝚘𝚍𝚎&gt;</span>𝟸𝟹𝟺𝟻𝟼𝟽<span class="nt">&lt;/𝚌𝚘𝚍𝚎&gt;</span>
+       <span class="nt">&lt;/𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+       <span class="nt">&lt;𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+           <span class="nt">&lt;𝚛𝚘𝚕𝚎&gt;</span>𝚌𝚞𝚜𝚝𝚘𝚖𝚎𝚛<span class="nt">&lt;/𝚛𝚘𝚕𝚎&gt;</span>
+           <span class="nt">&lt;𝚗𝚊𝚖𝚎&gt;</span>𝚙𝚎𝚛𝚜𝚘𝚗<span class="nt">&lt;/𝚗𝚊𝚖𝚎&gt;</span>
+           <span class="nt">&lt;𝚌𝚘𝚍𝚎&gt;</span>𝟹𝟺𝟻𝟼𝟽𝟾<span class="nt">&lt;/𝚌𝚘𝚍𝚎&gt;</span>
+       <span class="nt">&lt;/𝚙𝚊𝚛𝚝𝚗𝚎𝚛&gt;</span>
+   <span class="nt">&lt;/𝚙𝚊𝚛𝚝𝚗𝚎𝚛𝚜&gt;</span>
+<span class="nt">&lt;/𝚋𝚘𝚍𝚢&gt;</span>
+</code></pre></div></div>
+
+<p>As you can see, there are several <code class="language-plaintext highlighter-rouge">𝚙𝚊𝚛𝚝𝚗𝚎𝚛</code> segments here that describe the participants in a particular chain. We are interested in the tag <code class="language-plaintext highlighter-rouge">𝚌𝚘𝚍𝚎</code> of the participant with the <code class="language-plaintext highlighter-rouge">𝚛𝚘𝚕𝚎 = 𝚛𝚎𝚜𝚎𝚕𝚕𝚎𝚛</code>. The problem is that the document provider does not guarantee either the number of <code class="language-plaintext highlighter-rouge">𝚙𝚊𝚛𝚝𝚗𝚎𝚛</code> segments or their order (<code class="language-plaintext highlighter-rouge">𝚛𝚘𝚕𝚎 = 𝚌𝚞𝚜𝚝𝚘𝚖𝚎𝚛</code> may precede <code class="language-plaintext highlighter-rouge">𝚛𝚘𝚕𝚎 = 𝚜𝚞𝚙𝚙𝚕𝚒𝚎𝚛</code>). It is even possible that the segment we need will be missing!</p>
+
+<p>A map is ideal for solving the problem, where the keys are the contents of the <code class="language-plaintext highlighter-rouge">𝚛𝚘𝚕𝚎</code> tags, and the values are the contents of the <code class="language-plaintext highlighter-rouge">𝚌𝚘𝚍𝚎</code> tags. It will turn out something like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">𝚖𝚊𝚙_</span> <span class="o">=</span> <span class="p">{</span><span class="s">"𝚜𝚞𝚙𝚙𝚕𝚒𝚎𝚛"</span><span class="p">:</span> <span class="s">"𝟷𝟸𝟹𝟺𝟻𝟼"</span><span class="p">,</span> <span class="s">"𝚛𝚎𝚜𝚎𝚕𝚕𝚎𝚛"</span><span class="p">:</span> <span class="s">"𝟸𝟹𝟺𝟻𝟼𝟽"</span><span class="p">,</span> <span class="s">"𝚌𝚞𝚜𝚝𝚘𝚖𝚎𝚛"</span><span class="p">:</span> <span class="s">"𝟹𝟺𝟻𝟼𝟽𝟾"</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the end, we just need to extract the value of the desired key!</p>
+
+<p>Of course, you may need to deal with various exceptions (for example, empty or missing tags), but this, as well as the way to get a map, depends on your preferences and technical specifications (if you are lucky enough to have one). I just tried to talk about the method, not about its specific technical implementation.</p>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="blog" /><category term="xml" /><summary type="html"><![CDATA[It is not difficult to parse an XML document in which all tags are unique (or the path to them is unique). And it’s good if that’s how your schemes are described! But they are not always described the way you want them to be. Clients often come to you with their own schemes that cannot be changed. And you will have to process, for example, such a document:]]></summary></entry></feed>
