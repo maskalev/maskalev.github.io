@@ -1,4 +1,4 @@
-source: /docs
+source: ./docs
 title: Aleksandr Maskalev
 author:
   name: Aleksandr Maskalev
@@ -21,7 +21,7 @@ header_pages:
 minima:
   skin: classic
   social_links:
-   - { platform: rss, user_url: "http://127.0.0.1:4000/feed.xml" }
+   - { platform: rss, user_url: "https://maskalev.github.io/feed.xml" }
    - { platform: github, user_url: "https://github.com/maskalev" }
    - { platform: linkedin, user_url: "https://www.linkedin.com/in/aleksandr-maskalev" }
    - { platform: telegram, user_url: "https://t.me/clickclickclick" }
