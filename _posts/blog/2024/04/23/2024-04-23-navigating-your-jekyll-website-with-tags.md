@@ -69,6 +69,8 @@ permalink: /tags/
 ---
 ```
 
+[Link](https://maskalev.github.io/tags/) to my tags list page.
+
 Finally, I created individual pages for each tag listing all relevant posts. For this, I created the `tag.html` layout:
 
 ```html{% raw %}
@@ -96,6 +98,8 @@ layout: tag
 tags: jekyll
 ---
 ```
+
+[Link](https://maskalev.github.io/tags/jekyll) to `jelyll` tag page on this web-site.
 
 Note: There are different approaches to naming the directory for tags. Some recommend `_tags`, but this didn't work for me. Perhaps you have your own thoughts on this, and I'd be glad to hear them in the comments!
 
