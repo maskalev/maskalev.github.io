@@ -1,5 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-04-24T10:44:00+06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aleksandr Maskalev</title><subtitle>Write about what I&apos;ve learned and what inspires me
-</subtitle><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><entry><title type="html">Navigating Your Jekyll Website with Tags</title><link href="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html" rel="alternate" type="text/html" title="Navigating Your Jekyll Website with Tags" /><published>2024-04-23T23:04:02+06:00</published><updated>2024-04-23T23:04:02+06:00</updated><id>http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags</id><content type="html" xml:base="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html"><![CDATA[<p>So, I decided to enhance the navigation on my website and add tags functionality to my posts.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2024-08-14T15:21:47+06:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Aleksandr Maskalev</title><subtitle>Write about what I&apos;ve learned and what inspires me
+</subtitle><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><entry><title type="html">A minimal example of Python’s descriptor</title><link href="http://localhost:4000/docs/til/2024/08/14/a-minimal-example-of-python's-descriptor.html" rel="alternate" type="text/html" title="A minimal example of Python’s descriptor" /><published>2024-08-14T14:37:18+06:00</published><updated>2024-08-14T14:37:18+06:00</updated><id>http://localhost:4000/docs/til/2024/08/14/a-minimal-example-of-python&apos;s-descriptor</id><content type="html" xml:base="http://localhost:4000/docs/til/2024/08/14/a-minimal-example-of-python&apos;s-descriptor.html"><![CDATA[<p>A minimal example of Python’s descriptor</p>
+
+<p>Today I’ve looked into Python’s descriptors to find a minimal example of it.</p>
+
+<p>What I done.</p>
+
+<p>It known that in descriptor you can define methods <code class="language-plaintext highlighter-rouge">__set__()</code>, <code class="language-plaintext highlighter-rouge">__get__(),</code> and <code class="language-plaintext highlighter-rouge">__delete__()</code> to manage of accessing to object’s attributes. But what is the minimal set of these methods you can define in your descriptor? To find the answer to this question I created three classes, each consisting only of one method.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_foo</span> <span class="o">=</span> <span class="n">foo</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_bar</span> <span class="o">=</span> <span class="n">bar</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_baz</span> <span class="o">=</span> <span class="n">baz</span>
+    
+    <span class="k">class</span> <span class="nc">D_set</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"__set__ method"</span><span class="p">)</span>
+            <span class="n">instance</span><span class="p">.</span><span class="n">_foo</span> <span class="o">=</span> <span class="n">value</span>
+
+
+    <span class="k">class</span> <span class="nc">D_get</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"__get__ method"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">instance</span><span class="p">.</span><span class="n">_bar</span>
+
+
+    <span class="k">class</span> <span class="nc">D_delete</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">__delete__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">"__delete__ method"</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">instance</span><span class="p">.</span><span class="n">_baz</span>
+
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">D_set</span><span class="p">()</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="n">D_get</span><span class="p">()</span>
+    <span class="n">baz</span> <span class="o">=</span> <span class="n">D_delete</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="s">"foo"</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">,</span> <span class="s">"baz"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span><span class="p">.</span><span class="n">foo</span>
+<span class="o">&lt;</span><span class="n">foo</span><span class="p">.</span><span class="n">Foo</span><span class="p">.</span><span class="n">D_set</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7d5498c40f40</span><span class="o">&gt;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span><span class="p">.</span><span class="n">bar</span>
+<span class="n">__get__</span> <span class="n">method</span>
+<span class="s">'bar'</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">foo</span><span class="p">.</span><span class="n">baz</span>
+<span class="o">&lt;</span><span class="n">foo</span><span class="p">.</span><span class="n">Foo</span><span class="p">.</span><span class="n">D_delete</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x7d5498c40d60</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>You can see that only the <code class="language-plaintext highlighter-rouge">D_get</code> class is a real descriptor (it manages to access to the <code class="language-plaintext highlighter-rouge">self._bar</code> attribute). Others are not descriptors, because values of <code class="language-plaintext highlighter-rouge">self._foo</code> and <code class="language-plaintext highlighter-rouge">self._baz</code> attributes are instances, not strings.</p>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="docs" /><category term="til" /><summary type="html"><![CDATA[A minimal example of Python’s descriptor]]></summary></entry><entry><title type="html">I don’t know how git is working</title><link href="http://localhost:4000/docs/idk/2024/05/31/i-don't-know-how-git-is-working.html" rel="alternate" type="text/html" title="I don’t know how git is working" /><published>2024-05-31T18:03:29+06:00</published><updated>2024-05-31T18:03:29+06:00</updated><id>http://localhost:4000/docs/idk/2024/05/31/i-don&apos;t-know-how-git-is-working</id><content type="html" xml:base="http://localhost:4000/docs/idk/2024/05/31/i-don&apos;t-know-how-git-is-working.html"><![CDATA[<p>But it’s amazing technology!</p>]]></content><author><name>Aleksandr Maskalev</name><email>avmaskalev@gmail.com</email></author><category term="docs" /><category term="idk" /><summary type="html"><![CDATA[But it’s amazing technology!]]></summary></entry><entry><title type="html">Navigating Your Jekyll Website with Tags</title><link href="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html" rel="alternate" type="text/html" title="Navigating Your Jekyll Website with Tags" /><published>2024-04-23T23:04:02+06:00</published><updated>2024-04-23T23:04:02+06:00</updated><id>http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags</id><content type="html" xml:base="http://localhost:4000/blog/2024/04/23/navigating-your-jekyll-website-with-tags.html"><![CDATA[<p>So, I decided to enhance the navigation on my website and add tags functionality to my posts.</p>
 
 <p>Here’s what I wanted to accomplish:</p>
 
@@ -58,6 +103,8 @@ layout: base
 <span class="nn">---</span>
 </code></pre></div></div>
 
+<p><a href="https://maskalev.github.io/tags/">Link</a> to my tags list page.</p>
+
 <p>Finally, I created individual pages for each tag listing all relevant posts. For this, I created the <code class="language-plaintext highlighter-rouge">tag.html</code> layout:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
@@ -83,6 +130,8 @@ layout: base
 <span class="na">tags</span><span class="pi">:</span> <span class="s">jekyll</span>
 <span class="nn">---</span>
 </code></pre></div></div>
+
+<p><a href="https://maskalev.github.io/tags/jekyll">Link</a> to <code class="language-plaintext highlighter-rouge">jelyll</code> tag page on this web-site.</p>
 
 <p>Note: There are different approaches to naming the directory for tags. Some recommend <code class="language-plaintext highlighter-rouge">_tags</code>, but this didn’t work for me. Perhaps you have your own thoughts on this, and I’d be glad to hear them in the comments!</p>
 

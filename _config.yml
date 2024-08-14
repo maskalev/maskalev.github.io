@@ -14,6 +14,7 @@ plugins:
 remote_theme: jekyll/minima
 header_pages:
   - blog.md
+  - idk.md
   - til.md
   - my_projects.md
   - about.md
