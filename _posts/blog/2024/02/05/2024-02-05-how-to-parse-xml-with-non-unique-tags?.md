@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to parse XML with non-unique tags?"
+title: "How to Parse XML with Non-Unique Tags?"
 date: "2024-02-05 15:30:24 +0600"
 categories: blog
 published: true

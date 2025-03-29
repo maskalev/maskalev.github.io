@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "A minimal example of Python's descriptor"
+title: "A Minimal Example of Python's Descriptor"
 date: "2024-08-14 14:37:18 +0600"
 categories: til
 published: true

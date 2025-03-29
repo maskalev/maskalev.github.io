@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "Using Mutable Objects As A Default Argument"
+title: "Using Mutable Objects as a Default Argument"
 date: "2025-03-29 15:51:01 +0600"
 categories: blog
 published: true
-comments: false
+comments: true
 tags: python
 ---
 
@@ -26,14 +26,13 @@ You're not alone if you've ever been caught off guard by this quirk. Let’s fix
 ...     x.append(1)
 ...     return x
 ... 
->>> # It seems harmless, but the default value is evaluated only once,
->>> # when the function is defined — not each time it’s called.
 >>> foo()
 [1]
 >>> foo()
 [1, 1]
->>> # The list keeps growing on every call — even though we didn’t pass anything!
 ```
+The list keeps growing on every call — even though we didn’t pass anything! Becvause the default value is evaluated only once,when the function is defined — not each time it’s called.
+
 
 ### 1st approach
 Checking for an empty list inside the function
@@ -49,9 +48,9 @@ Checking for an empty list inside the function
 [1]
 >>> foo()
 [1]
->>> # It works, but keep in mind that 'not x' triggers __bool__() or __len__() 
->>> # under the hood.
 ```
+It works, but keep in mind that `not x` triggers `__bool__()` or `__len__()` under the hood.
+
 
 ### Common solution
 This is a common and cleaner approach. 'is' is not overloadable, so it safely compares identities.
@@ -67,8 +66,9 @@ This is a common and cleaner approach. 'is' is not overloadable, so it safely co
 [1]
 >>> foo()
 [1]
->>> # Caveat: someone could pass 'None' explicitly — which might not be what you want.
 ```
+Caveat: someone could pass `None` explicitly — which might not be what you want.
+
 
 ### The best solution!
 For full control, define a unique placeholder object that no one can accidentally pass in.
@@ -86,5 +86,5 @@ For full control, define a unique placeholder object that no one can accidentall
 [1]
 >>> foo()
 [1]
->>> # Clear, safe, and ensures that only actual lists are accepted.
 ```
+Clear, safe, and ensures that only actual lists are accepted.
