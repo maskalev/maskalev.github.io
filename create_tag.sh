@@ -3,7 +3,7 @@
 read -p "Enter new tag's title: " tag_title
 
 
-tag_filename="docs/tags/$tag_title.md"
+tag_filename="tags/$tag_title.md"
 if cat > "$tag_filename" <<EOF
 ---
 layout: tags
