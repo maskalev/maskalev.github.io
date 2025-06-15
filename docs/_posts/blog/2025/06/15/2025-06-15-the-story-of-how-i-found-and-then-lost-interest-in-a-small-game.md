@@ -3,8 +3,8 @@ layout: post
 title: "The Story of How I Found and Then Lost Interest in a Small Game"
 date: "2025-06-15 17:12:59 +0600"
 categories: blog
-published: true
-comments: true
+published: false
+comments: false
 tags:
 ---
 
