@@ -162,6 +162,8 @@ if __name__ == "__main__":
     print(f"best_swaps = {best_swaps}")
 ```
 
+This code [is working]({% post_url til/2025/06/17/2025-06-17-make-it-work-make-it-right-make-it-fast %})!
+
 I was the leaderboard champion for a couple of weeks!
 
 ![fig. A]({{ "/assets/blog/2025/06/15/videopuzzle-results.jpg" | relative_url }})
